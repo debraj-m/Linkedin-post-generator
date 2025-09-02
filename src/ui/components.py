@@ -1,11 +1,12 @@
 """
-UI components for Streamlit interface
+UI components for Streamlit interface - Simplified Copy Version
 """
 import streamlit as st
 from typing import Dict, List
 from datetime import datetime
 from src.agents.linkedin_post_agent import GeneratedPost, PostRequest
 from src.config import Config
+from src.utils.clipboard_helper import ClipboardHelper
 
 class UIComponents:
     """Reusable UI components for the Streamlit app"""
@@ -92,57 +93,40 @@ class UIComponents:
                     help="Add engaging CTAs to encourage interaction"
                 )
 
-            # Advanced options in expander
-            with st.expander("Advanced Options", expanded=False):
-                col3, col4 = st.columns(2)
-                
-                with col3:
-                    character_preference = st.radio(
-                        "Post Length Preference",
-                        options=["Standard (1000-1300 chars)", "Shorter (800-1000 chars)", "Longer (1300-1500 chars)"],
-                        help="Preferred length for generated posts"
-                    )
-                
-                with col4:
-                    engagement_focus = st.multiselect(
-                        "Engagement Focus",
-                        options=["Questions", "Stories", "Tips", "Statistics", "Personal Experience"],
-                        default=["Questions", "Tips"],
-                        help="Elements to emphasize for better engagement"
-                    )
-
+            # Submit button
             submitted = st.form_submit_button("Generate Posts", type="primary")
-
-            if submitted and topic:
+            
+            if submitted:
+                if not topic.strip():
+                    st.error("Please enter a topic to generate posts.")
+                    return None
+                
+                # Create PostRequest object
                 return PostRequest(
-                    topic=topic,
+                    topic=topic.strip(),
                     tone=tone,
-                    audience=audience,
                     post_type=post_type,
                     post_count=post_count,
+                    audience=audience,
                     include_hashtags=include_hashtags,
                     include_cta=include_cta
                 )
-            elif submitted and not topic:
-                st.error("Please enter a topic to generate posts.")
-                return None
             
             return None
     
     @staticmethod
     def render_posts(posts: List[GeneratedPost], metadata: Dict):
         """
-        Render generated posts with metadata
-        
-        Args:
-            posts: List of generated posts
-            metadata: Generation metadata
+        Render generated posts with simplified copy functionality
         """
         if not posts:
             st.error("No posts were generated. Please try again with a different topic or settings.")
             return
         
         st.success(f"Successfully generated {len(posts)} posts!")
+        
+        # Store posts in session state for potential future use
+        st.session_state['current_posts'] = posts
         
         # Generation metadata
         UIComponents._render_generation_metadata(metadata)
@@ -200,8 +184,9 @@ class UIComponents:
     
     @staticmethod
     def _render_single_post(post: GeneratedPost, index: int):
-        """Render a single post with metrics and actions"""
+        """Render a single post with simplified copy functionality"""
         with st.expander(f"Post {index} - {post.engagement_potential} Engagement Potential - Tone: {post.tone_used}", expanded=True):
+            
             # Post content
             st.markdown(post.content)
             
@@ -224,31 +209,36 @@ class UIComponents:
                 if post.hashtags:
                     st.metric("Hashtags", len(post.hashtags))
             
-            # Action buttons
-            col_copy, col_edit, col_analyze = st.columns([1, 1, 2])
+            # Simple copy section
+            st.markdown("---")
+            st.markdown("**📋 Copy this post:**")
             
-            with col_copy:
-                # Method 1: Use st.code with built-in copy button
-                st.markdown("**📋 Copy Post:**")
-                st.code(post.content, language=None)
-                st.caption("👆 Click the copy icon in the top-right corner of the code block")
-                
-                # Method 2: Text area for easy selection
-                st.text_area(
-                    "Or select from here:",
-                    value=post.content,
-                    height=80,
-                    key=f"copy_area_{index}_{hash(post.content) % 10000}",
-                    help="Triple-click to select all, then Ctrl+C to copy"
-                )
-                
-                # Method 3: Download option
+            # Single copy button
+            copy_html = ClipboardHelper.create_copy_button_html(
+                content=post.content,
+                button_id=f"post_{index}",
+                button_text="📋 Copy to Clipboard"
+            )
+            st.components.v1.html(copy_html, height=60)
+            
+            # Fallback text area
+            st.text_area(
+                "Or select manually (triple-click to select all):",
+                value=post.content,
+                height=100,
+                key=f"manual_{index}_{hash(post.content) % 10000}",
+                help="Triple-click to select all, then Ctrl+C (Windows) or Cmd+C (Mac) to copy"
+            )
+            
+            # Simple download option
+            col_dl, col_edit = st.columns(2)
+            with col_dl:
                 st.download_button(
-                    label="💾 Download as .txt",
+                    label="💾 Download",
                     data=post.content,
-                    file_name=f"linkedin_post_{index}.txt",
+                    file_name=f"post_{index}.txt",
                     mime="text/plain",
-                    key=f"download_{index}_{hash(post.content) % 10000}"
+                    key=f"dl_{index}_{hash(post.content) % 10000}"
                 )
             
             with col_edit:
@@ -297,6 +287,14 @@ class UIComponents:
             - Cost estimation and tracking
             """)
             
+            st.header("Copy Instructions")
+            st.markdown("""
+            **To copy a post:**
+            1. Click the "📋 Copy to Clipboard" button for instant copy
+            2. Or triple-click in the text area and press Ctrl+C
+            3. Use the download button to save as a file
+            """)
+            
             st.header("Tips for Better Posts")
             st.markdown("""
             - **Be specific** with your topic for better trend analysis
@@ -305,19 +303,6 @@ class UIComponents:
             - **Review and customize** generated content
             - **Test different post types** for variety
             - **Use trending topics** for better reach
-            """)
-            
-            st.header("AI Agent Features")
-            st.markdown("""
-            **Trend Analysis**: Analyzes current industry trends and discussions
-            
-            **Content Inspiration**: Studies successful LinkedIn post patterns
-            
-            **Audience Research**: Understands target audience interests
-            
-            **Quality Control**: Filters content for professional standards
-            
-            **Tone Optimization**: Selects most effective tone automatically
             """)
             
             st.header("Settings")
