@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LinkedIn Post Generator
 
-## Getting Started
+A Streamlit web application that generates engaging LinkedIn posts using Google's Gemini Pro AI. The app includes features like content planning, professional tone control, and smart hashtag generation.
 
-First, run the development server:
+## Features
 
+- Generate multiple LinkedIn post variations from a single topic
+- Two-step generation process (planning + execution)
+- Content quality filters and professional tone control
+- Smart hashtag generation
+- Character count tracking
+- Copy to clipboard functionality
+- Mobile-responsive design
+
+## Local Development
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <your-repo-url>
+cd <your-repo-name>
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Create a virtual environment (optional but recommended):
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Create a `.env` file in the root directory and add your Gemini API key:
+```
+GEMINI_API_KEY=your_api_key_here
+```
 
-## Learn More
+5. Run the app locally:
+```bash
+streamlit run app.py
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment to Streamlit Cloud
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Push your code to GitHub:
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin <your-github-repo-url>
+git push -u origin main
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. Go to [share.streamlit.io](https://share.streamlit.io)
 
-## Deploy on Vercel
+3. Log in with your GitHub account
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Deploy your app:
+   - Click "New app"
+   - Select your repository and branch
+   - Set the main file path as `app.py`
+   - Add your `GEMINI_API_KEY` to the secrets
+   - Click "Deploy"
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Environment Variables
+
+The following environment variables are required:
+- `GEMINI_API_KEY`: Your Google Gemini Pro API key
+
+To set these in Streamlit Cloud:
+1. Go to your app settings
+2. Click on "Secrets"
+3. Add your environment variables in the format:
+```toml
+GEMINI_API_KEY = "your_api_key_here"
+```
+
+## Health Check
+
+The application includes a health check endpoint accessible at:
+```
+https://your-app-url.streamlit.app/?health
+```
+
+## Technical Details
+
+- **Framework**: Streamlit
+- **Language**: Python
+- **AI Integration**: Google Gemini Pro
+- **Features**:
+  - Two-step content generation
+  - Professional content filtering
+  - Smart hashtag generation
+  - Character count tracking
+
+## Future Improvements
+
+- Save favorite posts
+- Integration with LinkedIn API for direct posting
+- More customization options
+- A/B testing different post styles
