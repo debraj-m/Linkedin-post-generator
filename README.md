@@ -396,21 +396,8 @@ pytest>=8.4.0              # Testing framework
 - Recommended: Python 3.12+
 - Tested: Python 3.12.1
 
-## 📄 License & Credits
-
-**MIT License** - Open source and free to use, modify, and distribute.
 
 ### Built With
 - **[Streamlit](https://streamlit.io)** - Interactive web application framework
 - **[Google Gemini AI](https://ai.google.dev)** - Advanced language model for content generation
 - **[Python](https://python.org)** - Core programming language
-
-### Project Information
-- **Version**: 2.0.0 (Assignment Submission)
-- **Author**: AI Application Development
-- **Last Updated**: January 2025
-- **Repository**: Linkedin-post-generator
-
----
-
-**🎯 Assignment-ready LinkedIn Post Generator with enterprise-grade features, comprehensive documentation, and production deployment capabilities.**
