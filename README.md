@@ -2,9 +2,9 @@
 
 An AI-powered web application that generates professional LinkedIn posts using Google's Gemini AI. Built with enhanced agentic capabilities, cost tracking, and production-ready features for assignment submission.
 
-## 🚀 Assignment Requirements Fulfilled
+## Requirements Fulfilled
 
-### ✅ Core Requirements
+### Core Requirements
 - **Topic input** with optional parameters (tone, audience, post count)
 - **Multiple post generation** (1-5 LinkedIn posts per request)
 - **Public web deployment** (no authentication required)
@@ -13,7 +13,7 @@ An AI-powered web application that generates professional LinkedIn posts using G
 - **Cost tracking** with real-time token usage and pricing
 - **Quality guardrails** with professional content filtering
 
-### 🤖 8-Step AI Agent Workflow
+### 8-Step AI Agent Workflow
 1. **Trend Analysis** - Research current industry trends and topics
 2. **Content Inspiration** - Study successful LinkedIn post patterns  
 3. **Audience Analysis** - Target specific professional demographics
@@ -23,7 +23,7 @@ An AI-powered web application that generates professional LinkedIn posts using G
 7. **Hashtag Research** - Generate relevant, trending hashtags
 8. **Final Assembly** - Polish and deliver ready-to-publish content
 
-## 🏗️ Project Architecture
+## Project Architecture
 
 ### Clean Modular Structure
 ```
@@ -47,7 +47,7 @@ nugget-assignment/
 └── README.md                  # This documentation
 ```
 
-## 🚀 Quick Start Guide
+## Quick Start Guide
 
 ### 1. Environment Setup
 ```bash
@@ -101,21 +101,42 @@ streamlit run app_modular.py --server.port 8502
 streamlit run app_modular.py --server.port 8080
 ```
 
-## 🏥 Health Endpoint
+## Health Endpoint
 
-### Health Check Access
-The application provides a health monitoring endpoint:
+### Live Application Links
+- **Main App**: https://linkedin-post-generator-debraj-m.streamlit.app/
+- **Health Check**: https://linkedin-post-generator-debraj-m.streamlit.app/?health
 
-**URL Pattern:**
+### Production Health Check
+
+#### Browser Access (Recommended)
 ```
-http://localhost:8501/?health
+Open: https://linkedin-post-generator-debraj-m.streamlit.app/?health
 ```
 
-**Response Format:**
+#### Command Line Testing
+```bash
+# Using curl
+curl "https://linkedin-post-generator-debraj-m.streamlit.app/?health"
+
+# Using PowerShell (Windows)
+Invoke-RestMethod -Uri "https://linkedin-post-generator-debraj-m.streamlit.app/?health"
+
+# Using Python
+python -c "import requests; print(requests.get('https://linkedin-post-generator-debraj-m.streamlit.app/?health').json())"
+```
+
+#### Online Testing Tools
+Use any HTTP testing tool with:
+```
+GET https://linkedin-post-generator-debraj-m.streamlit.app/?health
+```
+
+### Expected Health Response
 ```json
 {
   "status": "healthy",
-  "timestamp": "2025-01-15T10:30:00",
+  "timestamp": "2025-09-03T10:30:00",
   "app": "LinkedIn Post Generator", 
   "version": "2.0.0",
   "agent_status": "healthy",
@@ -126,12 +147,25 @@ http://localhost:8501/?health
 }
 ```
 
+### Status Indicators
+- **`healthy`** - All systems operational
+- **`degraded`** - Some issues but functional
+- **`unhealthy`** - Major issues detected
+
+### Health Check Access (Local Development)
+The application provides a health monitoring endpoint:
+
+**URL Pattern:**
+```
+http://localhost:8501/?health
+```
+
 **Status Codes:**
 - `healthy` - All systems operational
 - `degraded` - Some issues but functional
 - `unhealthy` - Major issues detected
 
-### Health Check Testing
+### Health Check Testing (Local Development)
 ```bash
 # Method 1: Browser
 # Open: http://localhost:8501/?health
@@ -143,7 +177,7 @@ curl "http://localhost:8501/?health"
 python -c "import requests; print(requests.get('http://localhost:8501/?health').json())"
 ```
 
-## 📊 Application Usage
+## Application Usage
 
 ### Basic Usage Flow
 1. **Open Application**: Navigate to `http://localhost:8501`
@@ -211,7 +245,7 @@ streamlit run app_modular.py
 # Check cost information in UI after generation
 ```
 
-## 🚀 Deployment Options
+## Deployment Options
 
 ### Streamlit Cloud (Recommended)
 1. **Push to GitHub**: Commit all code to repository
@@ -241,7 +275,7 @@ streamlit run app_modular.py --server.address 0.0.0.0
 - **Railway**: Auto-detection of Streamlit apps
 - **Heroku**: Using Procfile with Streamlit commands
 
-## 🔧 Configuration Options
+## Configuration Options
 
 ### Environment Variables
 ```bash
@@ -261,7 +295,7 @@ Edit `src/config.py` to customize:
 - Available tone and audience options
 - UI component configurations
 
-## 🛡️ Content Safety & Quality
+## Content Safety & Quality
 
 ### Multi-Layer Content Filtering
 1. **Input Validation**: Topic and parameter sanitization
@@ -322,16 +356,16 @@ python -c "from src.agents.linkedin_post_agent import LinkedInPostAgent; agent =
 # Visit: http://localhost:8501/?health
 ```
 
-## 📋 Assignment Compliance Checklist
+## Compliance Checklist
 
-### ✅ Required Features
+### Required Features
 - [x] **Topic input field** with validation
 - [x] **Optional parameters** (tone, audience, post count)
 - [x] **Multiple post generation** (1-5 posts configurable)
 - [x] **Public web application** (no authentication required)
 - [x] **Health endpoint** returning 200 OK status
 
-### ✅ Enhanced Features  
+### Enhanced Features  
 - [x] **Advanced agentic behavior** (8-step AI workflow)
 - [x] **Quality guardrails** and content filtering
 - [x] **Cost estimation** with real-time tracking
@@ -339,14 +373,14 @@ python -c "from src.agents.linkedin_post_agent import LinkedInPostAgent; agent =
 - [x] **Comprehensive testing** and validation
 - [x] **Production deployment** readiness
 
-### ✅ Technical Excellence
+### Technical Excellence
 - [x] **Modular architecture** for maintainability
 - [x] **Error handling** and user feedback
 - [x] **Performance optimization** for cost efficiency
 - [x] **Security best practices** for API key management
 - [x] **Documentation** and code comments
 
-## 📚 Dependencies
+## Dependencies
 
 ```txt
 streamlit>=1.27.0           # Web application framework
