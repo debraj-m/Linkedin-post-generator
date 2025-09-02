@@ -1,36 +1,33 @@
-# LinkedIn Post Generator
+# 🚀 LinkedIn Post Generator
 
 An AI-powered web application that generates professional LinkedIn posts using Google's Gemini AI with advanced multi-step agent approach.
 
-## Features
+## ✨ Features
 
-### Advanced AI Agent
-- **Multi-step content planning**: Strategic content planning → Trend Analysis → Content Research → Generation → Quality control → Hashtag generation
-- **Trend analysis**: Analyzes current industry trends and hot topics
-- **Content inspiration research**: Studies successful LinkedIn post patterns for better engagement
+### 🧠 Advanced AI Agent
+- **Multi-step content planning**: Strategic content planning → Generation → Quality control → Hashtag generation
 - **Content safety filtering**: Professional standards validation
 - **Quality scoring**: Engagement potential analysis
 - **Smart hashtag generation**: Relevant, trending hashtags
 
-### Professional Features
+### 📊 Professional Features
 - **Cost estimation**: Track API usage and costs
 - **Generation analytics**: Performance metrics and timing
 - **Customizable inputs**: Tone, audience, post type, length
 - **Real-time editing**: Customize generated posts
 - **Health monitoring**: System status and diagnostics
-- **Automatic tone optimization**: AI selects most effective tone when not specified
 
-### Assignment Requirements Compliance
-- Public web app with no password requirements
-- Topic input (required) + optional parameters
-- Generate ≥3 LinkedIn posts (configurable 1-5)
-- **Enhanced multi-step agent behavior**: Trend Analysis → Content Research → Audience Analysis → Planning → Generation → Filtering → Hashtag generation
-- Quality guardrails and content safety checks
-- Cost/latency info with token usage and time tracking
-- /health endpoint for status monitoring
-- Free tier compatible using Gemini Flash model
+### 🎯 Assignment Requirements Compliance
+- ✅ **Public web app** with no password requirements
+- ✅ **Topic input** (required) + optional parameters
+- ✅ **Generate ≥3 LinkedIn posts** (configurable 1-5)
+- ✅ **Multi-step agent behavior**: Planning → Generation → Filtering → Hashtag generation
+- ✅ **Quality guardrails**: Content filtering and safety checks
+- ✅ **Cost/latency info**: Token usage and time tracking
+- ✅ **/health endpoint**: Status monitoring
+- ✅ **Free tier compatible**: Uses Gemini Flash model
 
-## Architecture
+## 🏗️ Architecture
 
 ```
 📁 src/

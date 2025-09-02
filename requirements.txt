@@ -1,6 +1,5 @@
 streamlit>=1.27.0
 python-dotenv>=1.0.0
-google-generativeai==0.3.2
+google-generativeai>=0.8.0
 protobuf>=4.25.1
-protobuf>=4.25.1  # Required for google-generativeai
-typing-extensions>=4.5.0  # Required for streamlit
+typing-extensions>=4.5.0
