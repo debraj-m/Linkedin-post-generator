@@ -124,7 +124,7 @@ def check_health():
 
 def main():
     # Check if it's a health check request
-    if st.experimental_get_query_params().get("health"):
+    if "health" in st.query_params:
         st.json(check_health())
         return
 
@@ -211,5 +211,17 @@ def main():
                         with col2:
                             st.caption(f"Character count: {len(post)}")
 
+def cleanup():
+    """Cleanup function to handle graceful shutdown"""
+    try:
+        # Add a small delay to allow gRPC to shut down gracefully
+        import time
+        time.sleep(0.1)
+    except:
+        pass
+
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    finally:
+        cleanup()
