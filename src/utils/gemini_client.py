@@ -7,12 +7,17 @@ import time
 from src.config import Config
 
 class GeminiClient:
-    """Gemini AI client for content generation"""
+    """Gemini AI client for content generation with cost tracking"""
     
     def __init__(self):
         self.model = None
         self.model_name = None
+        self.cost_tracker = None  # Will be injected by the agent
         self._initialize_model()
+    
+    def set_cost_tracker(self, cost_tracker):
+        """Set the cost tracker for this client"""
+        self.cost_tracker = cost_tracker
     
     def _initialize_model(self) -> None:
         """Initialize Gemini model with fallback options"""
@@ -44,7 +49,7 @@ class GeminiClient:
     
     def generate_content(self, prompt: str, max_retries: int = 3) -> Optional[str]:
         """
-        Generate content using Gemini model with retry logic
+        Generate content using Gemini model with retry logic and cost tracking
         
         Args:
             prompt: The prompt to send to the model
@@ -60,7 +65,17 @@ class GeminiClient:
             try:
                 response = self.model.generate_content(prompt)
                 if response and response.text:
-                    return response.text.strip()
+                    output_text = response.text.strip()
+                    
+                    # Track costs if cost tracker is available
+                    if self.cost_tracker:
+                        self.cost_tracker.estimate_request_cost(
+                            self.model_name, 
+                            prompt, 
+                            output_text
+                        )
+                    
+                    return output_text
                 else:
                     print(f"Empty response on attempt {attempt + 1}")
             except Exception as e:

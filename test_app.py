@@ -16,9 +16,8 @@ def test_configuration():
     errors = Config.validate_config()
     if errors:
         print(f"❌ Configuration errors: {errors}")
-        return False
+        assert False, f"Configuration errors: {errors}"
     print("✅ Configuration valid")
-    return True
 
 def test_agent_initialization():
     """Test agent initialization"""
@@ -31,15 +30,20 @@ def test_agent_initialization():
             return agent
         else:
             print(f"❌ Agent unhealthy: {health['message']}")
-            return None
+            assert False, f"Agent unhealthy: {health['message']}"
     except Exception as e:
         print(f"❌ Agent initialization failed: {str(e)}")
-        return None
+        assert False, f"Agent initialization failed: {str(e)}"
 
-def test_post_generation(agent):
+def test_post_generation():
     """Test post generation"""
     print("Testing post generation...")
     try:
+        # Initialize agent for this test
+        agent = test_agent_initialization()
+        if not agent:
+            assert False, "Agent initialization failed"
+            
         request = PostRequest(
             topic="AI in business transformation",
             tone="Professional",

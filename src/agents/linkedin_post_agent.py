@@ -9,6 +9,7 @@ from src.utils.gemini_client import GeminiClient
 from src.utils.content_filter import ContentFilter
 from src.utils.hashtag_generator import HashtagGenerator
 from src.utils.trend_analyzer import TrendAnalyzer
+from src.utils.cost_estimator import CostEstimator
 from src.config import Config
 
 @dataclass
@@ -48,7 +49,10 @@ class LinkedInPostAgent:
     """
     
     def __init__(self):
+        self.cost_estimator = CostEstimator()
         self.gemini_client = GeminiClient()
+        self.gemini_client.set_cost_tracker(self.cost_estimator)  # Inject cost tracker
+        
         self.content_filter = ContentFilter(self.gemini_client)
         self.hashtag_generator = HashtagGenerator(self.gemini_client)
         self.trend_analyzer = TrendAnalyzer(self.gemini_client)
@@ -400,3 +404,7 @@ Respond with just the tone name and brief reasoning."""
             "model_info": self.gemini_client.get_model_info(),
             "generation_stats": self.generation_stats
         }
+    
+    def get_cost_estimator(self) -> CostEstimator:
+        """Get the cost estimator instance"""
+        return self.cost_estimator

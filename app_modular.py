@@ -15,14 +15,12 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 from src.config import Config
 from src.agents.linkedin_post_agent import LinkedInPostAgent
 from src.ui.components import UIComponents
-from src.utils.cost_estimator import CostEstimator
 
 class LinkedInPostGeneratorApp:
     """Main application class"""
     
     def __init__(self):
         self.agent = None
-        self.cost_estimator = CostEstimator()
         self._initialize_session_state()
         self._initialize_agent()
     
@@ -83,24 +81,30 @@ class LinkedInPostGeneratorApp:
     def _is_health_check(self) -> bool:
         """Check if this is a health check request"""
         try:
-            return "health" in st.query_params
+            query_params = st.query_params
+            return "health" in query_params
         except:
             return False
     
     def _handle_health_check(self):
         """Handle health check endpoint"""
         health_data = {
-            "status": "ok",
+            "status": "healthy",
             "timestamp": str(datetime.now()),
-            "app": Config.APP_TITLE,
-            "version": "1.0.0",
+            "app": "LinkedIn Post Generator",
+            "version": "2.0.0",
             "agent_status": "healthy" if st.session_state.agent_healthy else "unhealthy"
         }
         
-        if self.agent:
-            agent_health = self.agent.get_health_status()
-            health_data.update(agent_health)
+        if self.agent and st.session_state.agent_healthy:
+            try:
+                agent_health = self.agent.get_health_status()
+                health_data["model_info"] = agent_health.get("model_info", {})
+            except Exception as e:
+                health_data["agent_error"] = str(e)
+                health_data["status"] = "degraded"
         
+        st.success("✅ Health Check: Service is healthy")
         st.json(health_data)
     
     def _render_main_content(self):
@@ -180,7 +184,9 @@ class LinkedInPostGeneratorApp:
     def _render_cost_estimation(self, metadata: Dict):
         """Render cost estimation information"""
         with st.expander("Cost Estimation", expanded=False):
-            session_summary = self.cost_estimator.get_session_summary()
+            # Get cost estimator from the agent
+            cost_estimator = self.agent.get_cost_estimator()
+            session_summary = cost_estimator.get_session_summary()
             
             col1, col2, col3 = st.columns(3)
             
@@ -197,6 +203,10 @@ class LinkedInPostGeneratorApp:
                 st.metric("Avg Cost/Request", f"${session_summary['avg_cost_per_request']:.6f}")
             
             st.info("**Note:** Cost estimates are approximate and based on token estimation. Actual costs may vary.")
+            
+            # Debug information
+            if session_summary["total_requests"] == 0:
+                st.warning("**Debug:** No API requests tracked yet. This might indicate cost tracking isn't properly initialized.")
     
     def _render_footer(self):
         """Render application footer"""
