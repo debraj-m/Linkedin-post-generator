@@ -2,6 +2,12 @@
 
 An AI-powered web application that generates professional LinkedIn posts using Google's Gemini AI. Built with enhanced agentic capabilities, cost tracking, and production-ready features for assignment submission.
 
+## Demo
+
+🎥 **Watch the Application Demo**: [LinkedIn Post Generator Demo Video](https://drive.google.com/file/d/13dzLPtCIWdquIaJnnf37b13gq4dXGA0x/view?usp=sharing)
+
+🔗 **Live Application**: [https://linkedin-post-generator-debraj-m.streamlit.app/](https://linkedin-post-generator-debraj-m.streamlit.app/)
+
 ## Requirements Fulfilled
 
 ### Core Requirements
