@@ -11,6 +11,59 @@ class UIComponents:
     """Reusable UI components for the Streamlit app"""
     
     @staticmethod
+    def _create_copy_button_js(content: str, button_id: str) -> str:
+        """Create JavaScript for copy functionality"""
+        # Escape content for JavaScript
+        escaped_content = content.replace('\\', '\\\\').replace("'", "\\'").replace('\n', '\\n').replace('\r', '\\r')
+        
+        return f"""
+        <script>
+        function copyToClipboard_{button_id}() {{
+            const text = `{escaped_content}`;
+            if (navigator.clipboard && window.isSecureContext) {{
+                navigator.clipboard.writeText(text).then(function() {{
+                    alert('Post copied to clipboard!');
+                }}).catch(function(err) {{
+                    console.error('Failed to copy: ', err);
+                    fallbackCopyTextToClipboard(text);
+                }});
+            }} else {{
+                fallbackCopyTextToClipboard(text);
+            }}
+        }}
+        
+        function fallbackCopyTextToClipboard(text) {{
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+            
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {{
+                const successful = document.execCommand('copy');
+                if (successful) {{
+                    alert('Post copied to clipboard!');
+                }} else {{
+                    alert('Failed to copy. Please select the text manually.');
+                }}
+            }} catch (err) {{
+                console.error('Fallback: Oops, unable to copy', err);
+                alert('Failed to copy. Please select the text manually.');
+            }}
+            
+            document.body.removeChild(textArea);
+        }}
+        </script>
+        <button onclick="copyToClipboard_{button_id}()" style="background-color: #0066cc; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">
+            📋 Copy Post
+        </button>
+        """
+    
+    @staticmethod
     def render_header():
         """Render app header"""
         st.set_page_config(
@@ -228,9 +281,24 @@ class UIComponents:
             col_copy, col_edit, col_analyze = st.columns([1, 1, 2])
             
             with col_copy:
-                if st.button(f"Copy", key=f"copy_{index}"):
-                    st.code(post.content, language=None)
-                    st.success("Post copied! Use Ctrl+A, Ctrl+C to copy from the code block above.")
+                # Create a unique key for each post's copy button
+                copy_key = f"copy_post_{index}_{hash(post.content) % 10000}"
+                button_id = f"btn_{index}_{hash(post.content) % 1000}"
+                
+                # JavaScript-based copy button
+                copy_js = UIComponents._create_copy_button_js(post.content, button_id)
+                st.markdown(copy_js, unsafe_allow_html=True)
+                
+                # Fallback: text area for manual copy
+                with st.expander("📋 Manual Copy", expanded=False):
+                    st.text_area(
+                        "Select and copy:",
+                        value=post.content,
+                        height=100,
+                        key=copy_key,
+                        help="Select all text (Ctrl+A) and copy (Ctrl+C)"
+                    )
+                    st.info("💡 Select all text above and copy manually if the button doesn't work.")
             
             with col_edit:
                 if st.button(f"Customize", key=f"edit_{index}"):
