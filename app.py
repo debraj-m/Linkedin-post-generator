@@ -9,7 +9,29 @@ load_dotenv()
 
 # Configure Gemini API
 genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
-model = genai.GenerativeModel('gemini-pro')
+
+# Initialize the model with the correct name
+try:
+    available_models = genai.list_models()
+    # Debug: Print available models
+    print("Available models:", [m.name for m in available_models])
+    
+    # Find text generation model
+    generation_model = None
+    for m in available_models:
+        if 'generateContent' in m.supported_generation_methods:
+            generation_model = m.name
+            break
+    
+    if generation_model:
+        model = genai.GenerativeModel(generation_model)
+    else:
+        # Fallback to standard name
+        model = genai.GenerativeModel("gemini-1.0-pro")
+except Exception as e:
+    st.error(f"Error initializing Gemini model: {str(e)}")
+    print(f"Initialization error details: {str(e)}")
+    model = None
 
 def filter_content(text):
     """Filter content for professional standards"""
@@ -48,6 +70,9 @@ def generate_hashtags(topic, audience):
 
 def generate_posts(topic, tone, audience, post_count, include_hashtags):
     """Generate LinkedIn posts using Gemini API with enhanced features"""
+    if model is None:
+        return None, "Gemini model not properly initialized. Please check your API key and try again."
+
     try:
         # First, let's plan the content
         planning_prompt = f"""Plan {post_count} engaging LinkedIn posts about "{topic}".
@@ -133,6 +158,21 @@ def main():
         page_icon="📝",
         layout="centered"
     )
+    
+    # Check API key and model initialization
+    if not os.getenv('GEMINI_API_KEY'):
+        st.error("⚠️ Gemini API key not found. Please set the GEMINI_API_KEY environment variable.")
+        st.stop()
+    
+    try:
+        # Verify model access
+        response = model.generate_content("Test connection")
+        if not response:
+            st.error("⚠️ Could not connect to Gemini API. Please check your API key and try again.")
+            st.stop()
+    except Exception as e:
+        st.error(f"⚠️ Error connecting to Gemini API: {str(e)}")
+        st.stop()
 
     st.title("LinkedIn Post Generator")
     st.write("Generate engaging LinkedIn posts using AI")
