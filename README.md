@@ -196,7 +196,7 @@ python -c "import requests; print(requests.get('http://localhost:8501/?health').
 - **Smart Hashtag Generation**: Relevant, trending hashtags
 - **Progress Indicators**: 8-step workflow visualization
 
-## 💰 Cost Information & Performance
+##  Cost Information & Performance
 
 ### API Pricing (Google Gemini 1.5 Flash)
 - **Input Tokens**: $0.075 per 1M tokens
@@ -216,7 +216,7 @@ Based on actual testing with 7 API requests:
 - Per-request cost breakdown
 - Historical usage tracking
 
-## 🧪 Testing & Validation
+##  Testing & Validation
 
 ### Automated Testing
 ```bash
@@ -311,7 +311,7 @@ Edit `src/config.py` to customize:
 - Corporate communication best practices
 - Brand-safe content generation
 
-## 🆘 Troubleshooting
+##  Troubleshooting
 
 ### Common Issues & Solutions
 
